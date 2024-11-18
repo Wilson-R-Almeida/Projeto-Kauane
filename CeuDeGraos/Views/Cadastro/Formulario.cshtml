@@ -1,0 +1,81 @@
+@model CeuDeGraos.Models.ClienteViewModel
+
+<div style="gap: 15px;" class="d-flex flex-column pdt-50  align-items-center background-body" style="height: 730px;">
+    <div class="container d-flex justify-content-center align-items-center">
+        <div style="width: 800px; min-height: 600px; border-radius: 10px;"
+            class="login d-flex flex-column background-content p-5 justify-content-center align-items-center">
+            <h1 style="color: var(--secondary-color);" class="font-arial">Crie a sua conta</h1>
+
+            <form asp-action="SalvarClienteFisico" method="post" id="clientForm" class="d-flex flex-column full-width justify-content-center align-items-center pdt-30">
+                <div class="d-flex gap-2 flex-column full-width align-items-start mb-3">
+                    <label style="color: var(--secondary-color); width: 100%; font-size: 14px">Tipo de Cliente:</label>
+                    <div class="d-flex flex-row gap-1 full-width">
+                        <input type="radio" id="cpf" name="typeOfPerson" value="cpf" onchange="tipo()" checked>
+                        <label style="color: var(--secondary-color); width: 100%; font-size: 14px" for="cpf"
+                            class="font-arial">Pessoa Física</label>
+                        <input type="radio" id="cnpj" name="typeOfPerson" value="cnpj" onchange="tipo()">
+                        <label style="color: var(--secondary-color); width: 100%; font-size: 14px" for="cnpj"
+                            class="font-arial">Pessoa Jurídica</label>
+                    </div>
+
+                </div>
+
+                <!-- Campos específicos para CPF -->
+                <div id="cpfFields" class="type-cpf flex-column full-width gap-3" style="display: block;">
+                    <input placeholder="CPF" type="text" class="full-width" maxlength="14" asp-for="Cpf"
+                        onkeypress="mascaraMutuario(this,cpfCnpj)" onblur="clearTimeout()">
+                    <span id="error-cpfcnpj" style="color: red; font-size: 12px; display: none;"></span>
+                    <input placeholder="Nome Completo" type="text" class="full-width" maxlength="50" name="NmCliente">
+                    <input placeholder="Data de Nascimento" type="date" class="full-width" name="DtNasc">
+     
+                </div>
+
+                <!-- Campos específicos para CNPJ -->      
+                <div id="cnpjFields" class="type-cnpj flex-column full-width gap-3" style="display: none;">
+                    <input placeholder="CNPJ" type="text" class="full-width" maxlength="18" name="Cnpj"
+                        onkeypress="mascaraMutuario(this,cpfCnpj)" onblur="clearTimeout()">
+                    <span id="error-cpfcnpj" style="color: red; font-size: 12px; display: none;"></span>
+                    <input placeholder="Razão Social" type="text" class="full-width" asp-for="RazaoSocial">
+     
+                </div>
+ 
+                <div class="flex-column full-width gap-3">
+                    <input placeholder="CEP" type="text" class="full-width" maxlength="14" asp-for="CEP">
+                    <input placeholder="Telefone" type="tel" class="full-width" maxlength="15" asp-for="Telefone">
+                    <input placeholder="E-mail" type="text" class="full-width" maxlength="50" asp-for="Email">
+                    <input placeholder="Senha" type="password" class="full-width" maxlength="18" asp-for="Password">
+                    <input placeholder="Repita a senha" type="password" class="full-width" maxlength="18" asp-for="ConfirmPassword">
+                </div>
+                <div class="mt-3 d-flex tex-start full-width">
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger"} )
+                </div>
+                    
+
+                <span style="color: var(--secondary-color); width: 100%; font-size: 14px" class="font-arial text-start"><a asp-controller="Home" asp-action="TermsOfUse">Termos de Uso</a> e <a asp-controller="Home" asp-action="PrivacyPolicy">Política de Privacidade</a></span>
+                <button style="height: 50px; width: 300px; border-radius: 40px;" class="button-secondary-color-white font-arial mt-4 mb-3">Cadastrar</button>
+                <p style="color: var(--secondary-color);" class="font-arial">Já tem uma conta? <a asp-controller="Login" asp-action="Formulario">Acessar conta</a></p>
+            </form>  
+        </div>
+     </div>
+    </div>
+</div>
+<script>
+function tipo() {
+        const cpf = document.getElementsByName("typeOfPerson")[0].checked;
+        const  form  = document.querySelector("form");
+        const typeCpf = document.querySelector(".type-cpf");
+        const typeCnpj = document.querySelector(".type-cnpj");
+        
+        if(cpf){
+            typeCpf.style.display = 'block';
+            typeCnpj.style.display = 'none';
+            form.action = "/Cadastro/SalvarClienteFisico";
+        }else{
+            typeCpf.style.display = 'none';
+            typeCnpj.style.display  = 'block';
+            form.action = "/Cadastro/SalvarClienteJuridico";
+            }
+
+       console.log(form.action);
+}
+</script>      

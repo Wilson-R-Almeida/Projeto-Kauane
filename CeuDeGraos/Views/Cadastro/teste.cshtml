@@ -1,0 +1,102 @@
+﻿@model CeuDeGraos.Models.ClienteViewModel
+
+<h2>Cadastro de Cliente</h2>
+
+<form asp-action="SalvarClienteFisico" method="post" oninput="console.log('-input')">
+
+
+    <!-- Seleção de Tipo de Cliente -->
+    <div>
+        <label>Tipo de Cliente:</label>
+        <div>
+            <input type="radio" id="pessoaFisica" name="tipoCliente" value="PessoaFisica" checked
+                onclick="toggleClienteType()" />
+            <label for="pessoaFisica">Pessoa Física</label>
+
+            <input type="radio" id="pessoaJuridica" name="tipoCliente" value="PessoaJuridica"
+                onclick="toggleClienteType()" />
+            <label for="pessoaJuridica">Pessoa Jurídica</label>
+        </div>
+    </div>
+
+
+    <!-- Campos para Pessoa Física -->
+    <div id="pessoaFisicaFields">
+        <div>
+            <label>CPF</label>
+            <input name="CPF" type="text" class="form-control"/>
+        </div>
+        <div>
+            <label>Nome Completo</label>
+            <input name="NmCliente" class="form-control"/>
+        </div>
+
+        <div>
+            <label>Data de Nascimento</label>
+            <input name="DtNasc" type="date" class="form-control"/>
+        </div>
+    </div>
+
+    <!-- Campos para Pessoa Jurídica -->
+    <div id="pessoaJuridicaFields" style="display: none;">
+        <div>
+            <label>CNPJ</label>
+            <input name="Cnpj" class="form-control"/>
+        </div>
+        <div>
+            <label>Razão Social</label>
+            <input name="RazaoSocial" class="form-control" />
+        </div>
+    </div>
+
+    <div>
+        <label asp-for="CEP">CEP</label>
+        <input asp-for="CEP" class="form-control" required/>
+    </div>
+
+    <div>
+        <label asp-for="Telefone">Telefone</label>
+        <input asp-for="Telefone" class="form-control" required/>
+    </div>
+
+    <div>
+        <label asp-for="Email">Email</label>
+        <input asp-for="Email" class="form-control" type="email" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="Password">Senha</label>
+        <input type="password" asp-for="Password" class="form-control" id="Password" name="Password" />
+        <span></span>
+    </div>
+
+     <div class="form-group">
+        <label for="RepeatPassword">Repita a senha</label>
+        <input type="password"class="form-control" id="RepeatPassword" name="RepeatPassword" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+
+<script>
+    function toggleClienteType() {
+        const isPessoaFisica = document.getElementById("pessoaFisica").checked;
+        const form = document.querySelector("form");
+
+
+        document.getElementById("pessoaFisicaFields").style.display = isPessoaFisica ? "block" : "none";
+        document.getElementById("pessoaJuridicaFields").style.display = isPessoaFisica ? "none" : "block";
+
+        if (isPessoaFisica) {
+            form.action = "/Cadastro/SalvarClienteFisico";
+        } else {
+            form.action = "/Cadastro/SalvarClienteJuridico";
+        }
+        console.log(form["asp-action"])
+        console.log(form.action)
+    }
+
+    function validateInput(){
+
+    }
+</script>
