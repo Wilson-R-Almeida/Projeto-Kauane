@@ -4,6 +4,7 @@ using CeuDeGraos.Models;
 using CeuDeGraos.Data;
 using Microsoft.AspNetCore.Identity;
 using System.Text.RegularExpressions;
+using System.Data.Common;
 
 namespace CeuDeGraos.Controllers;
 
@@ -11,19 +12,49 @@ public class CadastroController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    private readonly UserManager<Usuario> _userManager;
-    private readonly SignInManager<Usuario> _signInManager;
-    public CadastroController(ILogger<HomeController> logger, UserManager<Usuario> userManager, SignInManager<Usuario> signInManager)
+    private readonly BancoContext _dbContext;
+    public CadastroController(ILogger<HomeController> logger, BancoContext dbContext)
     {
         _logger = logger;
-        _userManager = userManager;
-        _signInManager = signInManager;
+        _dbContext = dbContext;
     }
 
     public IActionResult Formulario()
     {
         return View();
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Register(UserViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            // Hash da senha
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Senha);
+
+            var usuario = new Usuario
+            {
+                Nome = model.Nome,
+                Email = model.Email,
+                CPF_CNPJ = model.CPF_CNPJ,
+                Senha = hashedPassword,
+                DataCadastro = DateTime.Now,
+                Endereco = model.Endereco,
+                TipoUsuario = model.TipoUsuario,
+                Ativo = true
+            };
+
+
+            _dbContext.Usuarios.Add(usuario);
+            await _dbContext.SaveChangesAsync();
+
+
+            return RedirectToAction("Formulario", "Login");
+        }
+
+        return View(model);
+    }
+/*
 
     [HttpPost]
     public async Task<IActionResult> SalvarClienteFisico(ClienteViewModel formulario)
@@ -60,7 +91,9 @@ public class CadastroController : Controller
         // Retorna a view com os dados em caso de erro de validação
         return View("Formulario", formulario);
     }
+    */
 
+/*
     [HttpPost]
     public async Task<IActionResult> SalvarClienteJuridico(ClienteViewModel formulario)
 
@@ -88,11 +121,7 @@ public class CadastroController : Controller
         }
         return View("Formulario", formulario);
     }
-
-    public IActionResult Sucesso()
-    {
-        return View();
-    }
+    */
 
     public IActionResult ConfirmacaoCadastro()
     {

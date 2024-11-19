@@ -9,7 +9,7 @@ namespace CeuDeGraos.Models
 
         [Required(ErrorMessage = "O campo Senha é obrigatório.")]
         [DataType(DataType.Password)]
-        public required string Password { get; set; }
+        public required string Senha { get; set; }
 
     }
 }

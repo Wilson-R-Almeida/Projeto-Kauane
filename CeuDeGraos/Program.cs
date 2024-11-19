@@ -1,5 +1,6 @@
 using CeuDeGraos.Data;
 using CeuDeGraos.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -12,17 +13,13 @@ builder.Services.AddDbContext<BancoContext>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication();
 
-builder.Services.AddIdentityApiEndpoints<Usuario>()
-.AddEntityFrameworkStores<BancoContext>();
-
-builder.Services.Configure<CeuDeGraos.Controllers.SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
-builder.Services.AddSingleton<IEmailSender, CeuDeGraos.Controllers.SmtpEmailSender>(sp =>
-{
-    var smtpSettings = sp.GetRequiredService<IOptions<CeuDeGraos.Controllers.SmtpSettings>>().Value;
-    return new CeuDeGraos.Controllers.SmtpEmailSender(smtpSettings);
-});
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login/Formulario"; // Página de login
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Página de acesso negado
+    });
 
 var app = builder.Build();
 
@@ -41,7 +38,6 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-app.MapIdentityApi<Usuario>();
 
 app.MapControllerRoute(
     name: "default",

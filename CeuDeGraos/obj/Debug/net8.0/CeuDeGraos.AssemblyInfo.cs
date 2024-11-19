@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CeuDeGraos")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4bd2fab6a28e5987de1b976dfaa6fc150d8a46a4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a9b86cee92aa651aed703431587b3c22b0062649")]
 [assembly: System.Reflection.AssemblyProductAttribute("CeuDeGraos")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CeuDeGraos")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

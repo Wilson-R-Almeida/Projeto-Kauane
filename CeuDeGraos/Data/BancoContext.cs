@@ -5,7 +5,7 @@ using Microsoft.Identity;
 
 namespace CeuDeGraos.Data;
 
-public class BancoContext : IdentityDbContext<Usuario>
+public class BancoContext : DbContext
 {
 
     public BancoContext(DbContextOptions<BancoContext> options) : base(options)
@@ -17,18 +17,10 @@ public class BancoContext : IdentityDbContext<Usuario>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Cliente>()
-            .HasDiscriminator<string>("ClienteTipo")
-            .HasValue<PessoaFisica>("PessoaFisica")
-            .HasValue<PessoaJuridica>("PessoaJuridica");
+        modelBuilder.Entity<Usuario>().ToTable("DBUsuario");
     }
 
-    public DbSet<Cliente> Clientes { get; set; }
+    public DbSet<Usuario> Usuarios { get; set; }
 
-    public DbSet<PessoaFisica> PessoasFisicas { get; set; }
-    public DbSet<PessoaJuridica> PessoasJuridicas { get; set; }
-    public DbSet<Produto> Produtos { get; set; }
-
-    public DbSet<SolicitacaoRecuperacaoSenha> SolicitacaoRecuperacaoSenha { get; set; }
 
 }
